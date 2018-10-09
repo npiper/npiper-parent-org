@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<!-- Template Project file for my projects - based on https://maven.apache.org/pom.html -->
+
+	<groupId>neilpiper.me</groupId>
+	<artifactId>parent.org</artifactId>
+	<!-- Default starting version is 0-SNAPSHOT -->
+	<version>0.0.1_${revision}</version>
+	<packaging>pom</packaging>
+	<!-- <parent /> <dependencies /> -->
+
+	<!-- Modules, sub-modules & properties -->
+	<modules />
+	<properties>
+		<project.name>npiper-parent-org</project.name>
+		<!-- Sane default when no revision property is passed in from the commandline -->
+		<revision>0-SNAPSHOT</revision>
+		<!-- Enforces these minimum versions on build -->
+		<miniumumMavenVersion>3.2.1</miniumumMavenVersion>
+		<mavenEnforcerPluginVersion>3.0.0-M1</mavenEnforcerPluginVersion>
+		<project.scm.id>gitserver</project.scm.id>
+		<!-- Default maven plugin versions -->
+	</properties>
+
+
+	<build>
+
+		<!-- Extension : s3 wagon for repo -->
+		<extensions>
+			<extension>
+				<groupId>org.kuali.maven.wagons</groupId>
+				<artifactId>maven-s3-wagon</artifactId>
+				<version>1.2.1</version>
+			</extension>
+
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>2.10</version>
+			</extension>
+		</extensions>
+
+		<!-- Set inherited to true -->
+		<plugins>
+
+
+			<!-- ENFORCER !! -->
+			<!-- Maven 3.2+ -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>${mavenEnforcerPluginVersion}</version>
+				<executions>
+					<execution>
+						<id>enforce-java</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>validate</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<rules>
+								<!-- Maven >= 3.2+ -->
+								<requireMavenVersion>
+									<version>${miniumumMavenVersion}</version>
+								</requireMavenVersion>
+
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+
+		<pluginManagement>
+			<plugins>
+
+
+
+
+
+				<!-- Maven SCM Plugin - tag on deployment -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.9.5</version>
+					<configuration>
+						<connectionType>developerConnection</connectionType>
+						<tag>${project.version}</tag>
+					</configuration>
+				</plugin>
+
+				<!-- Maven Github site plugin -->
+				<!-- Works in branch refs/heads/gh-pages -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
+
+
+
+				<plugin>
+					<!-- Deploy the web site -->
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.9</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>site</goal>
+							</goals>
+							<!-- select the Maven phase in which the plugin will be executed -->
+							<phase>site-deploy</phase>
+							<configuration>
+								<!-- Plugin configuration ges here -->
+
+								<server>github</server>
+
+								<!-- The commit message -->
+								<message>Building site for ${project.name}</message>
+								<!-- The location where the site is uploaded -->
+								<path>develop</path>
+								<!-- Use merge or override the content -->
+								<merge>true</merge>
+
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+
+	<!-- REPORTING -->
+
+	<!-- PROJECT INFORMATION -->
+
+	<!-- Name of the project or module , typically more than just the artifactId 
+		i.e. Java 1.5 = 'tiger', printed in the execution, build. Not mandatory but 
+		useful. -->
+	<name>npiper-parent-org</name>
+
+	<!-- Description of a project is always good, helps POM readers -->
+	<description>
+    Parent organisation settings pom for neilpiper.me projects
+  </description>
+
+	<!-- URL is helpful for maintenance on where to find the source code, project 
+		site. Github pages URL preferred -->
+	<url>https:///n_piper/${project.name}/</url>
+	<!-- When did this all start...? -->
+	<inceptionYear>2018</inceptionYear>
+
+	<!-- legal documents defining how and when a project (or parts of a project) 
+		may be used -->
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+
+		</license>
+	</licenses>
+
+	<!-- Typically only core dev team, leads, buildmasters. If the person should 
+		not be contacted about the project or initiative, they need not be listed 
+		here -->
+	<developers>
+		<developer>
+			<id>npiper</id>
+			<name>Neil Piper</name>
+			<email>solveapuzzledev@gmail.com</email>
+			<url>https://www.linkedin.com/in/piperneil</url>
+			<organization>neilpiper.me</organization>
+			<organizationUrl>http://neilpiper.me</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/London</timezone>
+			<properties>
+				<picUrl>https://avatars3.githubusercontent.com/u/436314</picUrl>
+			</properties>
+		</developer>
+	</developers>
+
+
+	<!-- ENVIRONMENT & RELEASE SETTINGS -->
+
+	<!-- Where / Which system to raise issues in, can be used by plugins but 
+		typically for project / site documentation. -->
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/npiper/${project.name}/issues</url>
+	</issueManagement>
+
+	<!-- Link to Travis-CI url -->
+	<ciManagement>
+		<system>Travis-CI</system>
+		<url>https://travis-ci.org/npiper/${project.name}</url>
+	</ciManagement>
+
+
+	<!-- Mailing lists are a great tool for keeping in touch with people about 
+		a project. Most mailing lists are for developers and users. -->
+	<!-- <mailingLists> <mailingList> <name>PROJECT ${project.name} Developer 
+		mailing list</name> <subscribe>${project.name}-dev-subscribe@sonatype.org</subscribe> 
+		<unsubscribe>${project.name}-dev-unsubscribe@sonatype.org</unsubscribe> <post>${project.name}-dev@sonatype.org</post> 
+		<archive>?</archive> </mailingList> </mailingLists> -->
+
+
+	<!-- Software configuration management details -->
+	<!-- Critical for the mvn:release plugin & process, where to find the source 
+		code. -->
+	<scm>
+		<url>https://github.com/npiper/${project.name}</url>
+		<connection>scm:git:git://github.com/npiper/${project.name}.git</connection>
+		<!-- <developerConnection>scm:git:git@github.com:npiper/${project.name}.git</developerConnection> -->
+
+		<developerConnection>scm:git:https://github.com/npiper/${project.name}.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<!-- REPOSITORIES & PLUGIN REPOSITORIES -->
+	<repositories>
+		<!-- public release repo -->
+		<repository>
+			<id>solveapuzzle-repo</id>
+			<!-- <url>s3://solveapuzzle-repo/release</url> -->
+			<url>https://s3-ap-southeast-2.amazonaws.com/solveapuzzle-repo/release</url>
+		</repository>
+	</repositories>
+	<pluginRepositories />
+
+
+	<!--manages the distribution of the artifact and supporting files during 
+		build, release process. Critical for the mvn:deploy & mvn:release process -->
+	<distributionManagement>
+
+		<repository>
+			<id>solveapuzzle-repo</id>
+			<url>s3://solveapuzzle-repo/release</url>
+		</repository>
+
+		<!-- Where the pages go -->
+		<site>
+			<id>gh-pages</id>
+			<url>dav:http://npiper.github.io/${project.name}/</url>
+			<!-- <url>file:///Users/neilpiper/SANDBOX/SITE/${project.name}</url> -->
+		</site>
+	</distributionManagement>
+
+	<!-- PROFILES Build & Deploy Profiles -->
+
+	<!-- <profiles> </profiles> -->
+
+	<organization>
+		<name>neilpiper.me</name>
+		<url>http://dev.neilpiper.me</url>
+	</organization>
+</project>
