@@ -1,9 +1,11 @@
 # Eclipse files
 .project
 .classpath
+/.settings
 
 # Maven files
 /target
+
 
 # Log file
 *.log

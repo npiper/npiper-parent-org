@@ -23,7 +23,7 @@ Specific child POM's can then be created based on need such as Plain Java, Sprin
 ### Create a new Git project
 
 ```
-mvn archetype
+
 ..
 git init
 git add . && git commit -am "initial commit"
@@ -36,7 +36,7 @@ git push origin
 ```
 wget https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/.gitignore .
 wget https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/deploy.sh .
-wget https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/.travis.sample .travis.yml
+wget -O .travis.yml https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/.travis.sample
 ```
 
 ### Encrypt keys into .travis.yml
