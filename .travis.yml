@@ -10,10 +10,10 @@ before_script:
  - cp .travis.settings.xml $HOME/.m2/settings.xml
 
 script:
-  - ./mvnw clean install  -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
+  - mvn clean install  -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
 
 after_success:
-  - ./mvnw site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
+  - mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
 
 env:
   global:
