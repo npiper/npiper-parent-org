@@ -1,16 +1,20 @@
 language: java
-before_install:
-- git config --global user.name "${GIT_USER_NAME}"
-- git config --global user.email "${GIT_USER_EMAIL}"
-- cp .travis.settings.xml $HOME/.m2/settings.xml
 
-install:
-- mvn clean install -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) 
+jdk: oraclejdk8
 
-deploy:
-  on:
-    branch: master
-- mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
+install: true
+
+before_script:
+ - git config --global user.name "${GIT_USER_NAME}"
+ - git config --global user.email "${GIT_USER_EMAIL}"
+ - cp .travis.settings.xml $HOME/.m2/settings.xml
+
+script:
+  - ./mvnw clean install  -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
+
+after_success:
+  - ./mvnw site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
+
 env:
   global:
   - secure: lP6TRXZ0DlirIR2Znesacbd4M3YE+NqG1by75/RdTnB2YT7szIGtZbuW13XveYJJSMITM4er4WweLP6YKaoyEdsnPmdmhvT36phmq+C+4PkCdXFVm71YEASi7vQl3NaKGrUe92zZaVC5ix+eInNZhakdY91wTdnOiu6ob/42rHtdmvkhF8XCfXIFrIylgw4TO0Tcc4GEdEDFUa0ai82SPsXXZUK1lSPwA7PyTyhdidAjlQIIWcZnSyEpBIZ5tqHz2irDLcyOaqOjC2qD4zdoc+7Ct/RRHjMYHgHHB1XVB3UJoq6Jt93Mdgb9AKDZndoVXVK7ZPC7xXcBGIIAKs6HuRmHv5c2U5vOc8hfukkdiBs00QOi9TZ6k5yn+QErCHQWe5AwYS9Fv2V3SXFrUo9RhO0ISyRf8Y1l7cPEhOSY4uKwSWiDnZJ1aKwf/iIUnQrwhW8vIzE08pGZovllHNOFoqXL/HI4t3DwUW826FzivZr/32x+M3crcoxWIh5dNL8EkcnW1DIyAZzsf2YmQkTxTficWGPNGsyc1P1lSwb6FxBub2bn4qJqVT0c1orFhJ6muqY9OhLoBVziv/JxXHoApK1ZlRTmH3Elu2npMMokpE8R9Ue1g9gAL7coK1Djy9ye/v2+h4qpQom4sOZhuohdaRDYDJIM6rTOfrmkHhjRB9M=
