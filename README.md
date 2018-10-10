@@ -137,6 +137,41 @@ The initial version is based on developing maven built, Java applications in the
 
 # Release Baselining (Maven snapshots, releases)
 
+## Travis CI Lifecycle
+
+https://docs.travis-ci.com/user/deployment
+https://docs.travis-ci.com/user/customizing-the-build/#the-build-lifecycle
+
+```
+before_install
+// set up Git and maven settings
+git config --global user.name "${GIT_USER_NAME}"
+git config --global user.email "${GIT_USER_EMAIL}"
+cp .travis.settings.xml $HOME/.m2/settings.xml
+
+install
+mvn clean install -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
+
+after_success
+- echo Versions, etc;
+
+deploy (only on master)
+  on:
+    branch: master
+    
+scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse -
+-short HEAD)
+
+after deploy (only on master)
+ on:
+   branch: master
+   mvn site
+
+release notes - git tag comparison?
+
+```
+
+
 Release versions are baselined into an S3 Bucket owned by
 solveapuzzledev.  The extension [maven-s3-wagon](https://github.com/jcaddel/maven-s3-wagon) is used to communicate to S3.  
 
