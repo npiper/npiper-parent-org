@@ -2,6 +2,10 @@ language: java
 
 jdk: oraclejdk8
 
+branches:
+  except:
+    - /^[0-9]/
+
 install: true
 
 before_script:
