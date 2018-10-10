@@ -29,6 +29,15 @@ git init
 git add . && git commit -am "initial commit"
 git remote add origin https://github.com/npiper/[PROJECT_NAME].git
 git push origin
+
+# create gh-pages branch
+git checkout --orphan gh-pages
+git rm -rf .
+touch README.md
+git add README.md
+git commit -m 'initial gh-pages commit'
+git push origin gh-pages
+
 ```
 
 ### Copy a sample travis-ci file and .gitignore
@@ -142,3 +151,8 @@ Why: You know the change you are after,.. it might take a few builds and tests t
 ```
 mvn deploy scm:tag -Drevision=${GIT-SHORT-TAG}
 ```
+
+# Suggestions
+
+ * Can the s3 repositories go in a settings.xml for Travis-ci?
+ https://blog.travis-ci.com/2017-03-30-deploy-maven-travis-ci-packagecloud/

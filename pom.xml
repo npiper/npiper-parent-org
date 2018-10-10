@@ -56,7 +56,7 @@
 				<version>${mavenEnforcerPluginVersion}</version>
 				<executions>
 					<execution>
-						<id>enforce-java</id>
+						<id>enforce-maven</id>
 						<goals>
 							<goal>enforce</goal>
 						</goals>
@@ -75,15 +75,19 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+				<!-- Deploy the web site -->
+				<!-- Needs to be in <plugins> and <pluginManagement> see: https://stackoverflow.com/questions/10483180/maven-what-is-pluginmanagement -->
+
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+			</plugin>
+
 		</plugins>
 
-
+		<!-- These plugin definitions are inherited by child POM'ss -->
 		<pluginManagement>
 			<plugins>
-
-
-
-
 
 				<!-- Maven SCM Plugin - tag on deployment -->
 				<plugin>
@@ -96,13 +100,39 @@
 					</configuration>
 				</plugin>
 
-				<!-- Maven Github site plugin -->
-				<!-- Works in branch refs/heads/gh-pages -->
+
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
+					<!-- Deploy the web site to github pages -->
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.12</version>
+					<configuration>
+						<!-- Plugin configuration ges here -->
+
+						<!-- The commit message -->
+						<message>Building site for ${project.name} at ${project.version}</message>
+
+						<server>github</server>
+
+						<!-- The location where the site is uploaded -->
+
+						<!-- Use merge or override the content -->
+						<merge>true</merge>
+
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>site</goal>
+							</goals>
+							<phase>site</phase>
+						</execution>
+					</executions>
 				</plugin>
+
+                <!-- Needed due to bug in mvn site plugin 
+                https://stackoverflow.com/questions/51091539/maven-site-plugins-3-3-java-lang-classnotfoundexception-org-apache-maven-doxia
+                -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
@@ -110,35 +140,6 @@
 				</plugin>
 
 
-
-				<plugin>
-					<!-- Deploy the web site -->
-					<groupId>com.github.github</groupId>
-					<artifactId>site-maven-plugin</artifactId>
-					<version>0.9</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>site</goal>
-							</goals>
-							<!-- select the Maven phase in which the plugin will be executed -->
-							<phase>site-deploy</phase>
-							<configuration>
-								<!-- Plugin configuration ges here -->
-
-								<server>github</server>
-
-								<!-- The commit message -->
-								<message>Building site for ${project.name}</message>
-								<!-- The location where the site is uploaded -->
-								<path>develop</path>
-								<!-- Use merge or override the content -->
-								<merge>true</merge>
-
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
 
 			</plugins>
 		</pluginManagement>
@@ -162,7 +163,7 @@
 
 	<!-- URL is helpful for maintenance on where to find the source code, project 
 		site. Github pages URL preferred -->
-	<url>https:///n_piper/${project.name}/</url>
+	<url>https://github.com/npiper/${project.name}</url>
 	<!-- When did this all start...? -->
 	<inceptionYear>2018</inceptionYear>
 
@@ -260,7 +261,7 @@
 		<!-- Where the pages go -->
 		<site>
 			<id>gh-pages</id>
-			<url>dav:http://npiper.github.io/${project.name}/</url>
+			<url>https://npiper.github.io/${project.name}/</url>
 			<!-- <url>file:///Users/neilpiper/SANDBOX/SITE/${project.name}</url> -->
 		</site>
 	</distributionManagement>
