@@ -130,9 +130,7 @@
 					</executions>
 				</plugin>
 
-                <!-- Needed due to bug in mvn site plugin 
-                https://stackoverflow.com/questions/51091539/maven-site-plugins-3-3-java-lang-classnotfoundexception-org-apache-maven-doxia
-                -->
+				<!-- Needed due to bug in mvn site plugin https://stackoverflow.com/questions/51091539/maven-site-plugins-3-3-java-lang-classnotfoundexception-org-apache-maven-doxia -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
@@ -158,8 +156,8 @@
 
 	<!-- Description of a project is always good, helps POM readers -->
 	<description>
-    Parent organisation settings pom for neilpiper.me projects
-  </description>
+	    Parent organisation settings pom for neilpiper.me projects
+	  </description>
 
 	<!-- URL is helpful for maintenance on where to find the source code, project 
 		site. Github pages URL preferred -->
