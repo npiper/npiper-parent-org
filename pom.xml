@@ -9,7 +9,7 @@
 	<groupId>neilpiper.me</groupId>
 	<artifactId>parent.org</artifactId>
 	<!-- Default starting version is 0-SNAPSHOT -->
-	<version>0.0.1_${revision}</version>
+	<version>0.1.0_${revision}</version>
 	<packaging>pom</packaging>
 	<!-- <parent /> <dependencies /> -->
 
@@ -149,8 +149,8 @@
 
 	<!-- PROJECT INFORMATION -->
 
-	<!-- Name of the project or module , typically more than just the artifactId 
-		i.e. Java 1.5 = 'tiger', printed in the execution, build. Not mandatory but 
+	<!-- Name of the project or module , typically more than just the artifactId
+		i.e. Java 1.5 = 'tiger', printed in the execution, build. Not mandatory but
 		useful. -->
 	<name>npiper-parent-org</name>
 
@@ -159,13 +159,13 @@
 	    Parent organisation settings pom for neilpiper.me projects
 	  </description>
 
-	<!-- URL is helpful for maintenance on where to find the source code, project 
+	<!-- URL is helpful for maintenance on where to find the source code, project
 		site. Github pages URL preferred -->
 	<url>https://github.com/npiper/${project.name}</url>
 	<!-- When did this all start...? -->
 	<inceptionYear>2018</inceptionYear>
 
-	<!-- legal documents defining how and when a project (or parts of a project) 
+	<!-- legal documents defining how and when a project (or parts of a project)
 		may be used -->
 	<licenses>
 		<license>
@@ -176,8 +176,8 @@
 		</license>
 	</licenses>
 
-	<!-- Typically only core dev team, leads, buildmasters. If the person should 
-		not be contacted about the project or initiative, they need not be listed 
+	<!-- Typically only core dev team, leads, buildmasters. If the person should
+		not be contacted about the project or initiative, they need not be listed
 		here -->
 	<developers>
 		<developer>
@@ -201,7 +201,7 @@
 
 	<!-- ENVIRONMENT & RELEASE SETTINGS -->
 
-	<!-- Where / Which system to raise issues in, can be used by plugins but 
+	<!-- Where / Which system to raise issues in, can be used by plugins but
 		typically for project / site documentation. -->
 	<issueManagement>
 		<system>github</system>
@@ -215,16 +215,16 @@
 	</ciManagement>
 
 
-	<!-- Mailing lists are a great tool for keeping in touch with people about 
+	<!-- Mailing lists are a great tool for keeping in touch with people about
 		a project. Most mailing lists are for developers and users. -->
-	<!-- <mailingLists> <mailingList> <name>PROJECT ${project.name} Developer 
-		mailing list</name> <subscribe>${project.name}-dev-subscribe@sonatype.org</subscribe> 
-		<unsubscribe>${project.name}-dev-unsubscribe@sonatype.org</unsubscribe> <post>${project.name}-dev@sonatype.org</post> 
+	<!-- <mailingLists> <mailingList> <name>PROJECT ${project.name} Developer
+		mailing list</name> <subscribe>${project.name}-dev-subscribe@sonatype.org</subscribe>
+		<unsubscribe>${project.name}-dev-unsubscribe@sonatype.org</unsubscribe> <post>${project.name}-dev@sonatype.org</post>
 		<archive>?</archive> </mailingList> </mailingLists> -->
 
 
 	<!-- Software configuration management details -->
-	<!-- Critical for the mvn:release plugin & process, where to find the source 
+	<!-- Critical for the mvn:release plugin & process, where to find the source
 		code. -->
 	<scm>
 		<url>https://github.com/npiper/${project.name}</url>
@@ -247,7 +247,7 @@
 	<pluginRepositories />
 
 
-	<!--manages the distribution of the artifact and supporting files during 
+	<!--manages the distribution of the artifact and supporting files during
 		build, release process. Critical for the mvn:deploy & mvn:release process -->
 	<distributionManagement>
 
