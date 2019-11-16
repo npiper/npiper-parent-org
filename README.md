@@ -10,6 +10,7 @@ organisation.  This allows other inheriting POM's to inherit those values.
 Specific child POM's can then be created based on need such as Plain Java, Spring,  Activiti, Mulesoft, Node.js etc;
 
 
+
 # How to use the Parent POM?
 
 ## Pre-Requisites
