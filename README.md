@@ -107,6 +107,16 @@ A lot of the project inherits location and github projects
   <name>hello-world</name>
   <description>Hello world test of parent</description>
   ```
+  
+### Set / Override the Github Organisation
+
+The default Github Organisation for this POM is `npiper`.
+
+It is possible to overwrite the Organisation by setting this property in the Child POM.
+
+```
+<githubOrg>solveapuzzle-dev</githubOrg>
+```
 
 ## Conventions to follow?
 

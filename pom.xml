@@ -16,6 +16,7 @@
 	<!-- Modules, sub-modules & properties -->
 	<modules />
 	<properties>
+	    <githubOrg>npiper</githubOrg>
 		<project.name>npiper-parent-org</project.name>
 		<!-- Sane default when no revision property is passed in from the commandline -->
 		<revision>0-SNAPSHOT</revision>
@@ -161,7 +162,7 @@
 
 	<!-- URL is helpful for maintenance on where to find the source code, project
 		site. Github pages URL preferred -->
-	<url>https://github.com/npiper/${project.name}</url>
+	<url>https://github.com/${githubOrg}/${project.name}</url>
 	<!-- When did this all start...? -->
 	<inceptionYear>2018</inceptionYear>
 
@@ -193,7 +194,7 @@
 			</roles>
 			<timezone>Europe/London</timezone>
 			<properties>
-				<picUrl>https://avatars3.githubusercontent.com/u/436314</picUrl>
+				<picUrl>https://avatars2.githubusercontent.com/u/436314?s=300</picUrl>
 			</properties>
 		</developer>
 	</developers>
@@ -205,13 +206,13 @@
 		typically for project / site documentation. -->
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/npiper/${project.name}/issues</url>
+		<url>https://github.com/${githubOrg}/${project.name}/issues</url>
 	</issueManagement>
 
 	<!-- Link to Travis-CI url -->
 	<ciManagement>
 		<system>Travis-CI</system>
-		<url>https://travis-ci.org/npiper/${project.name}</url>
+		<url>https://travis-ci.org/${githubOrg}/${project.name}</url>
 	</ciManagement>
 
 
@@ -227,11 +228,11 @@
 	<!-- Critical for the mvn:release plugin & process, where to find the source
 		code. -->
 	<scm>
-		<url>https://github.com/npiper/${project.name}</url>
-		<connection>scm:git:git://github.com/npiper/${project.name}.git</connection>
+		<url>https://github.com/${githubOrg}/${project.name}</url>
+		<connection>scm:git:git://github.com/${githubOrg}/${project.name}.git</connection>
 		<!-- <developerConnection>scm:git:git@github.com:npiper/${project.name}.git</developerConnection> -->
 
-		<developerConnection>scm:git:https://github.com/npiper/${project.name}.git</developerConnection>
+		<developerConnection>scm:git:https://github.com/${githubOrg}/${project.name}.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -259,7 +260,7 @@
 		<!-- Where the pages go -->
 		<site>
 			<id>gh-pages</id>
-			<url>https://npiper.github.io/${project.name}/</url>
+			<url>https://${githubOrg}.github.io/${project.name}/</url>
 			<!-- <url>file:///Users/neilpiper/SANDBOX/SITE/${project.name}</url> -->
 		</site>
 	</distributionManagement>
