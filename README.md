@@ -9,7 +9,14 @@ organisation.  This allows other inheriting POM's to inherit those values.
 
 Specific child POM's can then be created based on need such as Plain Java, Spring,  Activiti, Mulesoft, Node.js etc;
 
+```
+groupId: neilpiper.me
+artifactId: parent.org
 
+Current Major Version: 0
+Suggested Maven Import Range:  (,1.0]  x <= 1.0
+
+```
 
 # How to use the Parent POM?
 
@@ -18,36 +25,18 @@ Specific child POM's can then be created based on need such as Plain Java, Sprin
  * AWS Storage Repo S3 for Repository
  * github account - OAuth token
  * travis-ci account
+ * docker hub account
 
-## New Git project
+## Creating a New Git project
 
-### Create a new Git project
-
-```
-
-..
-git init
-git add . && git commit -am "initial commit"
-git remote add origin https://github.com/npiper/[PROJECT_NAME].git
-git push origin
-
-# create gh-pages branch
-git checkout --orphan gh-pages
-git rm -rf .
-touch README.md
-git add README.md
-git commit -m 'initial gh-pages commit'
-git push origin gh-pages
+Use the shell script `gitsetup.sh` to create a project and appropriate branches for typical development.
 
 ```
-
-### Copy a sample travis-ci file and .gitignore
-
+- develop : development branch - trunk based development
+- gh-pages : Github pages - a maven  and reports site will be deployed using a plugin
+- master : semantic versioning and deployments run through this branch
 ```
-wget https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/.gitignore .
-wget https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/deploy.sh .
-wget -O .travis.yml https://raw.githubusercontent.com/npiper/npiper-parent-pom/master/.travis.sample
-```
+
 
 ### Encrypt keys into .travis.yml
 
@@ -62,6 +51,8 @@ travis encrypt AWS_ACCESS_KEY_ID=[Your_AWS_Access_Key] --add
 travis encrypt AWS_SECRET_KEY=[Your_AWS_Secret_Key] --add
 travis encrypt GIT_USER_NAME=npiper --add
 travis encrypt GITPW=[Your GIT OAuth] --add
+travis encrypt DOCKER_USERNAME=[Your Dockerhub user] --add
+travis encrypt DOCKER_PASSWORD=[Your Dockerhub password] --add
 ```
 
 ### Add Repository , overwrite SCM URL in pom.xml
@@ -78,12 +69,15 @@ travis encrypt GITPW=[Your GIT OAuth] --add
 
 	<!-- Workaround to an inconsistency in Maven that child projects scm tag, appends parent's pom name -->
 	<scm>
-		<url>https://github.com/npiper/hello-world</url>
-		<developerConnection>scm:git:https://github.com/npiper/[repo-name].git</developerConnection>
+		<url>https://github.com/${githubOrg}/[repo-name]</url>
+		<developerConnection>scm:git:https://github.com/${githubOrg}/[repo-name].git</developerConnection>
 	</scm>
 ```
 
-### Choose the Parent
+# Using the Parent POM
+
+
+### Choose the righ Parent Version
 
 Release versions can be browsed using the 'tags' [https://github.com/npiper/npiper-parent-pom/tags](https://github.com/npiper/npiper-parent-pom/tags)
 
@@ -91,11 +85,13 @@ The parent versions can be browsed at: https://s3-ap-southeast-2.amazonaws.com/s
 
 Release Naming Convention:  *MAJOR.MINOR.PATCH* _BUILD.COMMIT*
 
+Release management should only be done off the master branch.
+
 ```
   <parent>
     <groupId>neilpiper.me</groupId>
     <artifactId>parent.org</artifactId>
-    <version>0.0.1_51.b4a6634</version>
+    <version>(,1.0]</version>
   </parent>
 ```
 
@@ -105,8 +101,9 @@ A lot of the project inherits location and github projects
 
 ```
   <name>hello-world</name>
-  <description>Hello world test of parent</description>
-  ```
+```
+
+There is a default `<description>` that puts in Project metadata in the site report and best to leave as is so you get this information.
   
 ### Set / Override the Github Organisation
 
@@ -116,6 +113,60 @@ It is possible to overwrite the Organisation by setting this property in the Chi
 
 ```
 <githubOrg>solveapuzzle-dev</githubOrg>
+```
+
+## Parent POM - Release process
+
+Tagging, Site documentation generation and deployment to the S3 Maven repository MUST only ever be done from the build server.
+
+Build metadata:
+* Travis CI build number
+* Git commit ID - short Ref
+
+Project tags and the site documentation 'About' page give traceability of which CI tag and build the semantic version was built against.
+
+```
+[Semantic Version]_[BuildNumber].[gitCommitId]
+```
+
+Use semantic versioning in your POM file to consider a release candidate of the change you are intending to make, and the CI server to guide the succesful build candidate to take forward.
+
+Why: You know the change you are after,.. it might take a few builds and tests to get it so the code traceability is always built in.
+
+The `.travis.yml` build file should be structured to only permit these actions to happen on the build server.
+
+A maven `<profile>` is used so it is not possible to do this locally (unless you need to debug.)
+
+```
+mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
+```
+
+#### Debugging locally
+
+When refactoring or when you need to test, - try to this as a rolling patch or minor revision that you throw away.
+
+e.g.
+
+```
+0.1 Current--> 0.2 Test, throwaway --> 0.3  Next
+```
+
+Set up environment variables so you can behave like a build server:
+
+```
+export AWS_ACCESS_KEY_ID=[Your_AWS_Access_Key]
+export AWS_SECRET_KEY=[Your_AWS_Secret_Key]
+export GIT_USER_NAME=npiper 
+export GITPW=[Your GIT OAuth] 
+export DOCKER_USERNAME=[Your Dockerhub user] 
+export DOCKER_PASSWORD=[Your Dockerhub password] 
+export TRAVIS_BUILD_NUMBER=01TEST
+export TRAVIS=true
+```
+
+Run the maven command from `.travis.yml` to test a build and deploy process:
+```
+mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
 ```
 
 ## Conventions to follow?
@@ -135,12 +186,14 @@ When using `site` put published version into github pages as path `${project.nam
 
 The initial version is based on developing maven built, Java applications in the following minimum standards.
 
+Properties in the project can be used, to see them use the command `mvn help:effective-pom`
 
-  * Maven version > 3.2.1
+  * Maven version > 3.5+
 
 # Validation
 
  * Maven at required versions (Enforcer)
+ * JDK 1.8
 
 # License
 
@@ -188,15 +241,7 @@ solveapuzzledev.  The extension [maven-s3-wagon](https://github.com/jcaddel/mave
 
 The build server will need authentication/authorisation to the S3 bucket to deploy releases but read-only access is public.
 
-## Release process
 
-Use semantic versioning in your POM file to consider a release candidate of the change you are intending to make, and the CI server to guide the succesful build candidate to take forward.
-
-Why: You know the change you are after,.. it might take a few builds and tests to get it so the code traceability is always built in.
-
-```
-mvn deploy scm:tag -Drevision=${GIT-SHORT-TAG}
-```
 
 # Suggestions
 
