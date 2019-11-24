@@ -12,21 +12,11 @@ before_script:
  - git config --global user.email "${GIT_USER_EMAIL}"
  - cp .travis.settings.xml $HOME/.m2/settings.xml
 
-stages:
-  - name: devbuild
-    if: type=pull_request OR branch != master
-  - name: masterdeploy
-    if: branch = master AND type !=pull_request
-  
-jobs:
-  include:
-    - stage: devbuild                
-      name: "Development Build"            
-      script: mvn -e clean install -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
+script:
+  - mvn clean install  -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
 
-    - stage: masterdeploy
-      name: "build master, site and deploy"
-      script: mvn -e clean install scm:tag deploy site -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername="${GIT_USER_NAME}" -Dpassword="${GITPW}"
+after_success:
+  - mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
 
 
 env:

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -9,14 +10,14 @@
 	<groupId>neilpiper.me</groupId>
 	<artifactId>parent.org</artifactId>
 	<!-- Default starting version is 0-SNAPSHOT -->
-	<version>0.2.0</version>
+	<version>0.1.2</version>
 	<packaging>pom</packaging>
 	<!-- <parent /> <dependencies /> -->
 
 	<!-- Modules, sub-modules & properties -->
 	<modules />
 	<properties>
-	    <githubOrg>npiper</githubOrg>
+		<githubOrg>npiper</githubOrg>
 		<project.name>npiper-parent-org</project.name>
 		<!-- Sane default when no revision property is passed in from the commandline -->
 		<revision>0-SNAPSHOT</revision>
@@ -77,13 +78,13 @@
 				</executions>
 			</plugin>
 
-<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-deploy-plugin</artifactId>
-  <configuration>
-    <skip>true</skip>
-  </configuration>
-</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
 
 		</plugins>
 
@@ -111,8 +112,8 @@
 
 	<!-- PROJECT INFORMATION -->
 
-	<!-- Name of the project or module , typically more than just the artifactId
-		i.e. Java 1.5 = 'tiger', printed in the execution, build. Not mandatory but
+	<!-- Name of the project or module , typically more than just the artifactId 
+		i.e. Java 1.5 = 'tiger', printed in the execution, build. Not mandatory but 
 		useful. -->
 	<name>npiper-parent-org</name>
 
@@ -126,13 +127,13 @@
 	    - Tag: ${project.version}_${revision}
 	  </description>
 
-	<!-- URL is helpful for maintenance on where to find the source code, project
+	<!-- URL is helpful for maintenance on where to find the source code, project 
 		site. Github pages URL preferred -->
 	<url>https://github.com/${githubOrg}/${project.name}</url>
 	<!-- When did this all start...? -->
 	<inceptionYear>2018</inceptionYear>
 
-	<!-- legal documents defining how and when a project (or parts of a project)
+	<!-- legal documents defining how and when a project (or parts of a project) 
 		may be used -->
 	<licenses>
 		<license>
@@ -143,8 +144,8 @@
 		</license>
 	</licenses>
 
-	<!-- Typically only core dev team, leads, buildmasters. If the person should
-		not be contacted about the project or initiative, they need not be listed
+	<!-- Typically only core dev team, leads, buildmasters. If the person should 
+		not be contacted about the project or initiative, they need not be listed 
 		here -->
 	<developers>
 		<developer>
@@ -168,7 +169,7 @@
 
 	<!-- ENVIRONMENT & RELEASE SETTINGS -->
 
-	<!-- Where / Which system to raise issues in, can be used by plugins but
+	<!-- Where / Which system to raise issues in, can be used by plugins but 
 		typically for project / site documentation. -->
 	<issueManagement>
 		<system>github</system>
@@ -182,16 +183,16 @@
 	</ciManagement>
 
 
-	<!-- Mailing lists are a great tool for keeping in touch with people about
+	<!-- Mailing lists are a great tool for keeping in touch with people about 
 		a project. Most mailing lists are for developers and users. -->
-	<!-- <mailingLists> <mailingList> <name>PROJECT ${project.name} Developer
-		mailing list</name> <subscribe>${project.name}-dev-subscribe@sonatype.org</subscribe>
-		<unsubscribe>${project.name}-dev-unsubscribe@sonatype.org</unsubscribe> <post>${project.name}-dev@sonatype.org</post>
+	<!-- <mailingLists> <mailingList> <name>PROJECT ${project.name} Developer 
+		mailing list</name> <subscribe>${project.name}-dev-subscribe@sonatype.org</subscribe> 
+		<unsubscribe>${project.name}-dev-unsubscribe@sonatype.org</unsubscribe> <post>${project.name}-dev@sonatype.org</post> 
 		<archive>?</archive> </mailingList> </mailingLists> -->
 
 
 	<!-- Software configuration management details -->
-	<!-- Critical for the mvn:release plugin & process, where to find the source
+	<!-- Critical for the mvn:release plugin & process, where to find the source 
 		code. -->
 	<scm>
 		<url>https://github.com/${githubOrg}/${project.name}</url>
@@ -214,10 +215,10 @@
 	<pluginRepositories />
 
 
-	<!--manages the distribution of the artifact and supporting files during
+	<!--manages the distribution of the artifact and supporting files during 
 		build, release process. Critical for the mvn:deploy & mvn:release process -->
 	<distributionManagement>
-        <downloadUrl>https://s3-ap-southeast-2.amazonaws.com/solveapuzzle-repo</downloadUrl>
+		<downloadUrl>https://s3-ap-southeast-2.amazonaws.com/solveapuzzle-repo</downloadUrl>
 		<repository>
 			<id>solveapuzzle-repo</id>
 			<url>s3://solveapuzzle-repo/release</url>
@@ -240,104 +241,115 @@
 		<name>neilpiper.me</name>
 		<url>http://dev.neilpiper.me</url>
 	</organization>
-	
-<!--  BUILD SERVER ONLY PROFILE -->	
 
-<!-- 
-   SCM Tagging - Maven Deploy Plugin
-   Github pages plugin
-   Maven site upload to Github pages
- -->
+	<!-- BUILD SERVER ONLY PROFILE -->
 
- <profiles>
-    <profile>
-      <id>travis-build-location</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        
-        <!--  Travis CI has the environment variable 'TRAVIS=true' on all builds. -->
-        
-        <property>
-          <name>env.TRAVIS</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-        
-      
-        
-        
-        	<plugin>
-				<!-- Deploy the web site -->
-				<!-- Needs to be in <plugins> so this and child ones can inherit
-				and <pluginManagement> see: https://stackoverflow.com/questions/10483180/maven-what-is-pluginmanagement -->
+	<!-- SCM Tagging - Maven Deploy Plugin Github pages plugin Maven site upload 
+		to Github pages -->
 
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-			</plugin>
-			
-			<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-deploy-plugin</artifactId>
-  <configuration>
-    <skip>false</skip>
-  </configuration>
-</plugin>
-			
-			
-        </plugins>
-        
-        <pluginManagement>
-      <plugins>
-      
-      
-      
-      
-      <plugin>
-					<!-- Deploy the web site to github pages -->
-					<groupId>com.github.github</groupId>
-					<artifactId>site-maven-plugin</artifactId>
-					<version>0.12</version>
-					<configuration>
-						<!-- Plugin configuration ges here -->
+	<profiles>
+		<profile>
+			<id>travis-build-location</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
 
-						<!-- The commit message -->
-						<message>Building site for ${project.name} at ${project.version} - revision ${revision}</message>
+				<!-- Travis CI has the environment variable 'TRAVIS=true' on all builds. -->
 
-						<server>github</server>
+				<property>
+					<name>env.TRAVIS</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
 
-						<!-- The location where the site is uploaded -->
 
-						<!-- Use merge or override the content -->
-						<merge>false</merge>
 
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>site</goal>
-							</goals>
-							<phase>site</phase>
-						</execution>
-					</executions>
-				</plugin>
-				
-				<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-deploy-plugin</artifactId>
-  <configuration>
-    <skip>false</skip>
-  </configuration>
-</plugin>
-				
-      </plugins>
-      </pluginManagement>	
-        
-      </build>
-      
-    </profile>
-  </profiles>
 
-	
+					<plugin>
+						<!-- Deploy the web site -->
+						<!-- Needs to be in <plugins> so this and child ones can inherit and 
+							<pluginManagement> see: https://stackoverflow.com/questions/10483180/maven-what-is-pluginmanagement -->
+
+						<groupId>com.github.github</groupId>
+						<artifactId>site-maven-plugin</artifactId>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</plugin>
+
+
+				</plugins>
+
+				<pluginManagement>
+					<plugins>
+
+
+
+
+						<plugin>
+							<!-- Deploy the web site to github pages -->
+							<groupId>com.github.github</groupId>
+							<artifactId>site-maven-plugin</artifactId>
+							<version>0.12</version>
+							<configuration>
+								<!-- Plugin configuration ges here -->
+
+								<!-- The commit message -->
+								<message>Building site for ${project.name} at ${project.version}
+									- revision ${revision}</message>
+
+								<server>github</server>
+
+								<!-- The location where the site is uploaded -->
+
+								<!-- Use merge or override the content -->
+								<merge>false</merge>
+
+							</configuration>
+							<executions>
+								<execution>
+									<goals>
+										<goal>site</goal>
+									</goals>
+									<phase>site</phase>
+								</execution>
+							</executions>
+						</plugin>
+
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-deploy-plugin</artifactId>
+							<configuration>
+								<skip>false</skip>
+							</configuration>
+						</plugin>
+
+					</plugins>
+
+					<!-- Maven SCM Plugin - tag on deployment -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-scm-plugin</artifactId>
+						<version>1.9.5</version>
+						<configuration>
+							<connectionType>developerConnection</connectionType>
+							<tag>${project.version}_${revision}</tag>
+						</configuration>
+					</plugin>
+
+
+				</pluginManagement>
+
+			</build>
+
+		</profile>
+	</profiles>
+
+
 </project>
