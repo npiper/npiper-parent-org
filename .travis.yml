@@ -1,6 +1,5 @@
 language: java
-dist: trusty
-jdk: oraclejdk8
+jdk: openjdk8
 
 branches:
   except:
@@ -13,11 +12,22 @@ before_script:
  - git config --global user.email "${GIT_USER_EMAIL}"
  - cp .travis.settings.xml $HOME/.m2/settings.xml
 
-script:
-  - mvn clean install  -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
+stages:
+  - name: devbuild
+    if: type=pull_request OR branch != master
+  - name: masterdeploy
+    if: branch = master AND type !=pull_request
+  
+jobs:
+  include:
+    - stage: devbuild                
+      name: "Development Build"            
+      script: mvn clean install -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
 
-after_success:
-  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && mvn clean site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
+    - stage: masterdeploy
+      name: "build master, site and deploy"
+      script: mvn clean install scm:tag deploy site -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername="${GIT_USER_NAME}" -Dpassword="${GITPW}"
+
 
 env:
   global:

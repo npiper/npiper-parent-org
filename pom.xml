@@ -9,7 +9,7 @@
 	<groupId>neilpiper.me</groupId>
 	<artifactId>parent.org</artifactId>
 	<!-- Default starting version is 0-SNAPSHOT -->
-	<version>0.1.0_${revision}</version>
+	<version>0.2.0</version>
 	<packaging>pom</packaging>
 	<!-- <parent /> <dependencies /> -->
 
@@ -21,9 +21,10 @@
 		<!-- Sane default when no revision property is passed in from the commandline -->
 		<revision>0-SNAPSHOT</revision>
 		<!-- Enforces these minimum versions on build -->
-		<miniumumMavenVersion>3.2.1</miniumumMavenVersion>
-		<mavenEnforcerPluginVersion>3.0.0-M1</mavenEnforcerPluginVersion>
+		<miniumumMavenVersion>3.5.0</miniumumMavenVersion>
+		<mavenEnforcerPluginVersion>3.0.0-M3</mavenEnforcerPluginVersion>
 		<project.scm.id>gitserver</project.scm.id>
+		<mavenScmPluginVersion>1.11.2</mavenScmPluginVersion>
 		<!-- Default maven plugin versions -->
 	</properties>
 
@@ -65,7 +66,7 @@
 						<inherited>true</inherited>
 						<configuration>
 							<rules>
-								<!-- Maven >= 3.2+ -->
+								<!-- Maven >= 3.5+ allows parent inheritance -->
 								<requireMavenVersion>
 									<version>${miniumumMavenVersion}</version>
 								</requireMavenVersion>
@@ -76,13 +77,13 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<!-- Deploy the web site -->
-				<!-- Needs to be in <plugins> and <pluginManagement> see: https://stackoverflow.com/questions/10483180/maven-what-is-pluginmanagement -->
-
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-			</plugin>
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-deploy-plugin</artifactId>
+  <configuration>
+    <skip>true</skip>
+  </configuration>
+</plugin>
 
 		</plugins>
 
@@ -90,46 +91,6 @@
 		<pluginManagement>
 			<plugins>
 
-				<!-- Maven SCM Plugin - tag on deployment -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-scm-plugin</artifactId>
-					<version>1.9.5</version>
-					<configuration>
-						<connectionType>developerConnection</connectionType>
-						<tag>${project.version}</tag>
-					</configuration>
-				</plugin>
-
-
-				<plugin>
-					<!-- Deploy the web site to github pages -->
-					<groupId>com.github.github</groupId>
-					<artifactId>site-maven-plugin</artifactId>
-					<version>0.12</version>
-					<configuration>
-						<!-- Plugin configuration ges here -->
-
-						<!-- The commit message -->
-						<message>Building site for ${project.name} at ${project.version}</message>
-
-						<server>github</server>
-
-						<!-- The location where the site is uploaded -->
-
-						<!-- Use merge or override the content -->
-						<merge>true</merge>
-
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>site</goal>
-							</goals>
-							<phase>site</phase>
-						</execution>
-					</executions>
-				</plugin>
 
 				<!-- Needed due to bug in mvn site plugin https://stackoverflow.com/questions/51091539/maven-site-plugins-3-3-java-lang-classnotfoundexception-org-apache-maven-doxia -->
 				<plugin>
@@ -157,7 +118,12 @@
 
 	<!-- Description of a project is always good, helps POM readers -->
 	<description>
-	    Parent organisation settings pom for neilpiper.me projects
+	    ${project.name} 
+	    - GroupID: ${project.groupId}  
+	    - ArtifactId: ${project.artifactId}  
+	    - Version: ${project.version}  
+	    - Build revision: ${revision}
+	    - Tag: ${project.version}_${revision}
 	  </description>
 
 	<!-- URL is helpful for maintenance on where to find the source code, project
@@ -251,7 +217,7 @@
 	<!--manages the distribution of the artifact and supporting files during
 		build, release process. Critical for the mvn:deploy & mvn:release process -->
 	<distributionManagement>
-
+        <downloadUrl>https://s3-ap-southeast-2.amazonaws.com/solveapuzzle-repo</downloadUrl>
 		<repository>
 			<id>solveapuzzle-repo</id>
 			<url>s3://solveapuzzle-repo/release</url>
@@ -260,6 +226,7 @@
 		<!-- Where the pages go -->
 		<site>
 			<id>gh-pages</id>
+			<name></name>
 			<url>https://${githubOrg}.github.io/${project.name}/</url>
 			<!-- <url>file:///Users/neilpiper/SANDBOX/SITE/${project.name}</url> -->
 		</site>
@@ -273,4 +240,104 @@
 		<name>neilpiper.me</name>
 		<url>http://dev.neilpiper.me</url>
 	</organization>
+	
+<!--  BUILD SERVER ONLY PROFILE -->	
+
+<!-- 
+   SCM Tagging - Maven Deploy Plugin
+   Github pages plugin
+   Maven site upload to Github pages
+ -->
+
+ <profiles>
+    <profile>
+      <id>travis-build-location</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        
+        <!--  Travis CI has the environment variable 'TRAVIS=true' on all builds. -->
+        
+        <property>
+          <name>env.TRAVIS</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+        
+      
+        
+        
+        	<plugin>
+				<!-- Deploy the web site -->
+				<!-- Needs to be in <plugins> so this and child ones can inherit
+				and <pluginManagement> see: https://stackoverflow.com/questions/10483180/maven-what-is-pluginmanagement -->
+
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-deploy-plugin</artifactId>
+  <configuration>
+    <skip>false</skip>
+  </configuration>
+</plugin>
+			
+			
+        </plugins>
+        
+        <pluginManagement>
+      <plugins>
+      
+      
+      
+      
+      <plugin>
+					<!-- Deploy the web site to github pages -->
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.12</version>
+					<configuration>
+						<!-- Plugin configuration ges here -->
+
+						<!-- The commit message -->
+						<message>Building site for ${project.name} at ${project.version} - revision _${revision} </message>
+
+						<server>github</server>
+
+						<!-- The location where the site is uploaded -->
+
+						<!-- Use merge or override the content -->
+						<merge>false</merge>
+
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>site</goal>
+							</goals>
+							<phase>site</phase>
+						</execution>
+					</executions>
+				</plugin>
+				
+				<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-deploy-plugin</artifactId>
+  <configuration>
+    <skip>false</skip>
+  </configuration>
+</plugin>
+				
+      </plugins>
+      </pluginManagement>	
+        
+      </build>
+      
+    </profile>
+  </profiles>
+
+	
 </project>
