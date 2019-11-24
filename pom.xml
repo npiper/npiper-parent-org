@@ -303,7 +303,7 @@
 						<!-- Plugin configuration ges here -->
 
 						<!-- The commit message -->
-						<message>Building site for ${project.name} at ${project.version} - revision _${revision} </message>
+						<message>Building site for ${project.name} at ${project.version} - revision ${revision}</message>
 
 						<server>github</server>
 

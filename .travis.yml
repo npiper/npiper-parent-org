@@ -22,11 +22,11 @@ jobs:
   include:
     - stage: devbuild                
       name: "Development Build"            
-      script: mvn clean install -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
+      script: mvn -e clean install -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD)
 
     - stage: masterdeploy
       name: "build master, site and deploy"
-      script: mvn clean install scm:tag deploy site -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername="${GIT_USER_NAME}" -Dpassword="${GITPW}"
+      script: mvn -e clean install scm:tag deploy site -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername="${GIT_USER_NAME}" -Dpassword="${GITPW}"
 
 
 env:
