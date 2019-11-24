@@ -330,18 +330,21 @@
 							</configuration>
 						</plugin>
 
+
+						<!-- Maven SCM Plugin - tag on deployment -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-scm-plugin</artifactId>
+							<version>1.9.5</version>
+							<configuration>
+								<connectionType>developerConnection</connectionType>
+								<tag>${project.version}_${revision}</tag>
+							</configuration>
+						</plugin>
+
 					</plugins>
 
-					<!-- Maven SCM Plugin - tag on deployment -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-scm-plugin</artifactId>
-						<version>1.9.5</version>
-						<configuration>
-							<connectionType>developerConnection</connectionType>
-							<tag>${project.version}_${revision}</tag>
-						</configuration>
-					</plugin>
+
 
 
 				</pluginManagement>
