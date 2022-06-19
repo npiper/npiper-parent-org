@@ -20,6 +20,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Get Joke Of The Day
+     # You may pin to the exact commit or the version.
+     # uses: h2floh/action-get-joke-of-the-day@3897b533e06d52c86ec1b273eee1a6ad555bfbe2
+      uses: h2floh/action-get-joke-of-the-day@v1
+      with:
+        # Jokes.One API Key (not required for less than 10 invocations/hour)
+         jokes-one-api-key: none
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
