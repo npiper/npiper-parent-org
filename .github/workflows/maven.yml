@@ -3,6 +3,10 @@
 
 name: Java CI with Maven
 
+permissions:
+  id-token: write
+  contents: write
+
 on:
   push:
     branches: [ "master" ]
