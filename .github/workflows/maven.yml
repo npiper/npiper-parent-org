@@ -33,5 +33,8 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+        
+        
+        
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean install --file pom.xml -Drevision=${{ github.run_id }}.$(git rev-parse --short HEAD)
