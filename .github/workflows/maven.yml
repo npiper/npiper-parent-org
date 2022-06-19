@@ -37,4 +37,4 @@ jobs:
         
         
     - name: Build with Maven
-      run: mvn -B clean install --file pom.xml -Drevision=${{ github.run_id }}.$(git rev-parse --short HEAD)
+      run: mvn -B -e -X clean install --file pom.xml -Drevision=${{ github.run_id }}.$(git rev-parse --short HEAD)
