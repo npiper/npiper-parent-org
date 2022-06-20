@@ -14,7 +14,7 @@ on:
     branches: [ "master" ]
     
 jobs:
-  build:
+  build_on_master:
 
     runs-on: ubuntu-latest
 
@@ -27,12 +27,6 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2   
-
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        role-to-assume: arn:aws:iam::329799773336:role/npiper-githubactions-role
-        aws-region: eu-west-2
 
     - name: Declare some variables
       id: vars
@@ -49,3 +43,27 @@ jobs:
         
     - name: Build with Maven
       run: mvn -B -e -X clean install --file pom.xml -Drevision=${{ github.run_id }}.${{ steps.vars.outputs.sha_short }}
+      
+  publish-job:
+      runs-on: ubuntu-latest
+      needs: [build_on_master]
+      steps:
+        - uses: actions/checkout@v2
+        
+        
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            role-to-assume: arn:aws:iam::329799773336:role/npiper-githubactions-role
+            aws-region: eu-west-2
+        
+        - name: Declare some variables
+          id: vars2
+          shell: bash
+          run: |
+           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"        
+        
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 14
+        - run: mvn -B --file pom.xml -DskipTests site deploy scm:tag -Drevision=${{ github.run_id }}.${{ steps.vars2.outputs.sha_short }}
