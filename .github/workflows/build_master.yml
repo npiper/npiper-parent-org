@@ -62,18 +62,8 @@ jobs:
           shell: bash
           run: |
            echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"  
-           
-        - name: Use GitHub Token
-          uses: frankdejonge/use-github-token@1.0.1
-          with:
-             # The authentication value
-             authentication: '${{ secrets.GHUBUILDSER}}:${{ secrets.GHOAUTH_SECRET_TOKEN }}'
-             # git config --global user.name value
-             user_name: '${{ secrets.GHUBUILDSER}}'
-             # git config --global user.email value
-             user_email: ${{ secrets.GHBUILDEMAIL}}'
     
         - uses: actions/setup-java@v1
           with:
             java-version: 14
-        - run: mvn -B --file pom.xml -DskipTests site deploy scm:tag -Drevision=${{ github.run_id }}.${{ steps.vars2.outputs.sha_short }}
+        - run: mvn -B --file pom.xml -DskipTests site deploy scm:tag -Dgithub.global.userName=${{ secrets.GHUBUILDSER}} -Dgithub.global.oauth2Token=${{ secrets.GHOAUTH_SECRET_TOKEN }} -Drevision=${{ github.run_id }}.${{ steps.vars2.outputs.sha_short }}
