@@ -61,8 +61,18 @@ jobs:
           id: vars2
           shell: bash
           run: |
-           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"        
-        
+           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"  
+           
+        - name: Use GitHub Token
+          uses: frankdejonge/use-github-token@1.0.1
+          with:
+             # The authentication value
+             authentication: '${{ secrets.GHUBUILDSER}}:${{ secrets.GHOAUTH_SECRET_TOKEN }}'
+             # git config --global user.name value
+             user_name: '${{ secrets.GHUBUILDSER}}'
+             # git config --global user.email value
+             user_email: ${{ secrets.GHBUILDEMAIL}}'
+    
         - uses: actions/setup-java@v1
           with:
             java-version: 14
