@@ -1,0 +1,29 @@
+@startuml Hello World
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v13.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/BusinessApplications/all.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/SecurityIdentityCompliance/all.puml
+
+rectangle "repo" {
+SimpleStorageService(storageAlias, "solveapuzzle-repo", "s3-bucket", "Maven Repository")
+folder "release"
+folder "site"
+folder "snapshot"
+}
+
+IdentityAccessManagementRole(npiperRole,"npiper-githubactions-role","Role to run github actions build")
+IdentityAccessManagementAWSSTS(githubToken,"sts","STS Token Service")
+IdentityAccessManagementTemporarySecurityCredential(tempCred,"github-token","Temp token to authenticate to role")
+IdentityAccessManagementPermissions(bucketPerms,"solveapuzzle-repo-policy","Policy for bucket access")
+
+IdentityAccessManagementAddon(oidcConnect,"OIDCProvider","token.actions.githubusercontent.com")
+
+bucketPerms --> storageAlias : "s3:getObject, s3:putObject"
+npiperRole --> bucketPerms : hasManagedPolicy
+npiperRole --> githubToken : "action AssumeRole"
+githubToken --> tempCred : "Temp Credential 1hr"
+
+
+@enduml
