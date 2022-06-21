@@ -62,11 +62,6 @@ jobs:
           shell: bash
           run: |
            echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"  
-           
-        - name: AWS CLI
-          uses: ItsKarma/aws-cli@v1.70.0
-          with:
-            args: sts get-caller-identity
     
         - uses: actions/setup-java@v1
           with:
