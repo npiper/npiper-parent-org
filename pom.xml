@@ -10,7 +10,7 @@
 	<groupId>neilpiper.me</groupId>
 	<artifactId>parent.org</artifactId>
 	<!-- Default starting version is 0-SNAPSHOT -->
-	<version>0.2.3</version>
+	<version>0.2.4</version>
 	<packaging>pom</packaging>
 	<!-- <parent /> <dependencies /> -->
 
@@ -253,7 +253,9 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 
-				<!-- Travis CI has the environment variable 'TRAVIS=true' on all builds. -->
+				<!-- Github Actions  has the environment variable 'CI=true' on all builds. 
+				https://docs.github.com/en/actions/learn-github-actions/environment-variables
+				-->
 
 				<property>
 					<name>env.CI</name>
