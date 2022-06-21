@@ -66,4 +66,4 @@ jobs:
         - uses: actions/setup-java@v1
           with:
             java-version: 14
-        - run: mvn -e -X -B --file pom.xml -DskipTests site deploy scm:tag -Daws.accessKeyId=${{ env.AWS_ACCESS_KEY_ID }} -Daws.secretKey=${{ env.AWS_SECRET_ACCESS_KEY }} -Dgithub.global.userName=${{ secrets.GHUBUILDSER}} -Dgithub.global.oauth2Token=${{ secrets.GHOAUTH_SECRET_TOKEN }} -Drevision=${{ github.run_id }}.${{ steps.vars2.outputs.sha_short }}
+        - run: mvn -e -B --file pom.xml -DskipTests site deploy scm:tag -Dgithub.global.userName=${{ secrets.GHUBUILDSER}} -Dgithub.global.oauth2Token=${{ secrets.GHOAUTH_SECRET_TOKEN }} -Drevision=${{ github.run_id }}.${{ steps.vars2.outputs.sha_short }}
