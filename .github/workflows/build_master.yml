@@ -50,10 +50,6 @@ jobs:
       steps:
         - uses: actions/checkout@v2
         
-        - name: Chuck Norris quote
-          uses: glav/chuck-norris-quote@v1.0
-          with:
-            quote-format: html     
         
         - name: Configure AWS Credentials
           uses: aws-actions/configure-aws-credentials@v1
