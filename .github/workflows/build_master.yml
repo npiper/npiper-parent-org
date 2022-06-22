@@ -57,6 +57,12 @@ jobs:
             role-to-assume: arn:aws:iam::329799773336:role/npiper-githubactions-role
             aws-region: eu-west-2
         
+        - name: Show session info
+          uses: giboow/action-aws-cli@v1
+          with:
+            args: sts get-caller-identity
+
+        
         - name: Declare some variables
           id: vars2
           shell: bash
