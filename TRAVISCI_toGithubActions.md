@@ -80,6 +80,7 @@ Role: `arn:aws:iam::329799773336:role/npiper-githubactions-role`
         aws-region: eu-west-2
 ```
 
+[Info about assuming roles via AWS CLI](https://aws.amazon.com/premiumsupport/knowledge-center/iam-assume-role-cli/)
 
 ### S3 Bucket
 
@@ -160,3 +161,39 @@ mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --shor
 [AWS IAM - Create role for OpenID connect](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html)
 
 [StackOverflow - getting the branch, Short SHA in github action](https://stackoverflow.com/questions/58886293/getting-current-branch-and-commit-hash-in-github-action)
+
+
+## Appendix
+
+[maven-s3-wagon - what is the least privelege s3 bucket policy needed?](https://github.com/jcaddel/maven-s3-wagon/issues/10)
+
+```
+{
+"Statement": [
+{
+"Sid": "Stmt1372216541",
+"Action": [
+"s3:PutObject",
+"s3:PutObjectAcl",
+"s3:GetObject"
+],
+"Effect": "Allow",
+"Resource": [
+"arn:aws:s3:::solveapuzzle-repo/release/*",
+"arn:aws:s3:::solveapuzzle-repo/site/*",
+"arn:aws:s3:::solveapuzzle-repo/snapshot/*",
+]
+}
+],
+"Statement": [
+{
+"Sid": "Stmt1372212814",
+"Action": [
+"s3:ListBucket"
+],
+"Effect": "Allow",
+"Resource": "arn:aws:s3:::solveapuzzle-repo"
+}
+]
+}
+```
