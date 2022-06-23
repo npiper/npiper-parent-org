@@ -20,12 +20,18 @@
 		<githubOrg>npiper</githubOrg>
 		<project.name>npiper-parent-org</project.name>
 		<!-- Sane default when no revision property is passed in from the commandline -->
+
 		<revision>0-SNAPSHOT</revision>
 		<!-- Enforces these minimum versions on build -->
-		<miniumumMavenVersion>3.5.0</miniumumMavenVersion>
+		<miniumumMavenVersion>3.6.0</miniumumMavenVersion>
 		<mavenEnforcerPluginVersion>3.0.0-M3</mavenEnforcerPluginVersion>
 		<project.scm.id>gitserver</project.scm.id>
-		<mavenScmPluginVersion>1.11.2</mavenScmPluginVersion>
+		<mavenScmPluginVersion>1.13.0</mavenScmPluginVersion> 
+				<!-- 1.9.5 --> 
+		<mavenS3WagonVersion>1.3.3</mavenS3WagonVersion>
+		<wagon-webdav-jackrabbitVersion>3.5.1</wagon-webdav-jackrabbitVersion>
+		<githubSiteMavenVersion>0.12<</githubSiteMavenVersion>
+
 		<!-- Default maven plugin versions -->
 	</properties>
 
