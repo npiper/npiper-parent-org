@@ -1,0 +1,71 @@
+ifdef::env-github[]
+:imagesdir: foo/
+endif::[]
+
+:icons: font
+:toc:
+:toc-placement!:
+
+= Parent Organisation pom for neilpiper.me
+
+toc::[]
+
+
+Source code for the parent pom settings for the Organisation 'neilpiper.me'.
+
+The pom is minimal with the intent of setting up the basic rules and properties for the neilpiper.me
+organisation.  This allows other inheriting POM's to inherit those values.
+
+Specific child POM's can then be created based on need such as Plain Java, Spring,  Activiti, Mulesoft, Node.js etc;
+
+```
+groupId: neilpiper.me
+artifactId: parent.org
+
+Current Major Version: 0
+Suggested Maven Import Range:  (,1.0]  x <= 1.0
+```
+
+[NOTE]
+====
+A sample note admonition.
+We can use gemoji icons in the Asciidoctor markup.
+We assign an icon name to the document
+attributes `tip-caption`, `note-caption` and `important-caption`.
+====
+
+plantuml::roles.puml[]
+
+image::http://www.plantuml.com/plantuml/svg/VLD1Rziy3BtxLwWw-GFi-2jwos5ebbrwA1hK0NPMP2RMAak2AAL8X_ttKPRJ66lJa_N8z_WeKhx787o8WovkEjWh0sprizqGPdq83fTDuyNhug127tSHmKjh0fYma7Pen2jgiSFqhHKbiDvRNpijJ2hO76_l5lytdS9Gt2WZTUpUYpVqNTjXi6RX27xCVuz8lI2kdDDAYg2i8H-jhz3ROBquGDEgmMcOK0l-g2HSau2CNeNJGmScq9VQ8IjX95ny2Wyo27FGmBW7PpdxNNncKMA6Aog05UDezH64Yszl6kfHc89tzIxA5mW9F8eZ6FPCALIaFV7_YhtL7VXaf44WyFS0CUR828Uz3RpuKnJdvbTI0kAZCDJ4GA5dgw4qJZdmwLZnVAxp7eKSvrbxIl6A9mOBblbeM2QmYS5sKUcEUhlcGyDijssPLLlx0gRY692AKfYD0JRDw8igMnYSzSAVpZjPUnYfGfU1SWbMF9lK8HKbWoHY8qYzYnZwf90YvBjO_PNZ1loW4DCToxoK5C7gu-PgPxMI9pBSZ0T6Jvnb2HDZLRAvFf-kiwQqgfDhQmp8KF6dXn_hZRT7HTkagkCD5jEyF__Fai6iILRNtzZymR5bUbpB0uIdtQ_amGYvE25UNDx1A9sL8cKlfdQxVBz_sRFL9f_SA5iXnW4IYHTpHbASDqRqlAJBDjbjxtbn3wQBW_uB[]
+
+== Homepage for Maven Site documentation
+
+icon:github[] https://npiper.github.io/npiper-parent-org[Github Pages: https://npiper.github.io/npiper-parent-org]
+
+
+=== Version
+
+[example]
+====
+0.3
+
+https://github.com/npiper/npiper-parent-org/tags[Tags]
+====
+
+== My Code callout example
+
+[source]
+----
+\ifdef::env-github[] <1> (1)
+:imagesdir: https://gist.githubusercontent.com/path/to/gist/revision/dir/with/all/images
+endif::[]
+\ifndef::env-github[] <2> 
+:imagesdir: ./
+endif::[]
+----
+<1> Use the `ifdef` to customize for online rendering (2)
+<2> Use the `ifndef` to customize for offline
+
+== Project Configuration
+
+== Build Dependencies, Extensions

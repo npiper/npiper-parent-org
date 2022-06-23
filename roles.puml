@@ -1,5 +1,4 @@
 @startuml Hello World
-
 !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v13.0/dist
 !include AWSPuml/AWSCommon.puml
 !include AWSPuml/BusinessApplications/all.puml

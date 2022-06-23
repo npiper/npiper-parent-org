@@ -162,6 +162,7 @@ mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --shor
 
 [StackOverflow - getting the branch, Short SHA in github action](https://stackoverflow.com/questions/58886293/getting-current-branch-and-commit-hash-in-github-action)
 
+[Github Actions for a Maven project](https://medium.com/@alexander.volminger/ci-cd-for-java-maven-using-github-actions-d009a7cb4b8f)
 
 ## Appendix
 
@@ -218,3 +219,6 @@ New Repos added:
 ]
 }
 ```
+
+**Go S3 Private?**
+https://github.com/s3-wagon-private/s3-wagon-private
