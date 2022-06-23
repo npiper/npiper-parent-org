@@ -46,7 +46,7 @@ Resources:
   MavenRepoPolicy:
      Type: AWS::IAM::ManagedPolicy
      Properties:   
-       Description: Limits access to just read,write of 
+       Description: Limits access to just read,write, ls of Repo directories
        ManagedPolicyName: solveapuzzle-repo-policy
        PolicyDocument:
          Version: '2012-10-17' 
@@ -55,12 +55,19 @@ Resources:
              Effect: Allow
              Action:
                - s3:PutObject
+               - s3:PutObjectAcl
                - s3:GetObject
              Resource:
                - arn:aws:s3:::solveapuzzle-repo/release/*
                - arn:aws:s3:::solveapuzzle-repo/site/*
                - arn:aws:s3:::solveapuzzle-repo/snapshot/*
-    
+         Statement:
+           - Sid: AllowRoleToListBucket
+             Effect: Allow
+             Action:
+              - s3:ListBucket
+             Resource:
+              - arn:aws:s3:::solveapuzzle-repo
                
 Outputs:
   Role:

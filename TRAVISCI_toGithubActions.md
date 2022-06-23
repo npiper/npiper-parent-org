@@ -165,6 +165,27 @@ mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --shor
 
 ## Appendix
 
+
+**Older version, group of S3 Wagon didn't work well with Role STS Token**
+
+https://github.com/s3-wagon-private/s3-wagon-private/issues/30
+
+```
+The problem seems to be far downstream in aws-java-sdk, actually. Versions prior to 1.8.0 do not seem to work with AWS STS credentials, while subsequent versions do. I opened an issue with aws-maven: spring-attic/aws-maven#49
+
+New Repos added:
+				<groupId>com.github.seahen</groupId>
+				<artifactId>maven-s3-wagon</artifactId>
+				<version>1.3.3</version>
+
+
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>3.5.1</version>
+```
+
+**What is a good least privelege bucket policy?**
+
 [maven-s3-wagon - what is the least privelege s3 bucket policy needed?](https://github.com/jcaddel/maven-s3-wagon/issues/10)
 
 ```
