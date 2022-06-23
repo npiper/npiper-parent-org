@@ -1,0 +1,51 @@
+Resources:
+# Create a build user role who can assume role, what conditions and has access to the Maven S3 Repo - only under this AWS account
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: github-builduser-role
+      ManagedPolicyArns:
+        - !Ref MavenRepoPolicy
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+                AWS: 329799773336
+            
+# Create our build user who could assume the role, no user pass as only CLI access
+  BuildUser: 
+    Type: AWS::IAM::User
+    Properties: 
+      UserName: builduser2
+
+  buildaccesskey:
+   Type: AWS::IAM::AccessKey
+   Properties:
+    UserName:
+      !Ref BuildUser
+
+# Create the limited access policy for S3 only repo's
+  MavenRepoPolicy:
+     Type: AWS::IAM::ManagedPolicy
+     Properties:   
+       Description: Limits access to just read,write of 
+       ManagedPolicyName: solveapuzzle-repo-policy-2
+       PolicyDocument:
+         Version: '2012-10-17' 
+         Statement:
+           - Sid: AllowRoleToAccessRepoBuckets
+             Effect: Allow
+             Action:
+               - s3:PutObject
+               - s3:GetObject
+             Resource:
+               - arn:aws:s3:::solveapuzzle-repo/release/*
+               - arn:aws:s3:::solveapuzzle-repo/site/*
+               - arn:aws:s3:::solveapuzzle-repo/snapshot/*
+Outputs:
+ AccessKeyforbuild:
+  Value:
+    !Ref buildaccesskey
+ SecretKeyforbuild:
+  Value: !GetAtt buildaccesskey.SecretAccessKey
