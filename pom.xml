@@ -30,7 +30,7 @@
 				<!-- 1.9.5 --> 
 		<mavenS3WagonVersion>1.3.3</mavenS3WagonVersion>
 		<wagon-webdav-jackrabbitVersion>3.5.1</wagon-webdav-jackrabbitVersion>
-		<githubSiteMavenVersion>0.12<</githubSiteMavenVersion>
+		<githubSiteMavenVersion>0.12</githubSiteMavenVersion>
 
 		<!-- Default maven plugin versions -->
 	</properties>
