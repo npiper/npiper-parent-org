@@ -1,4 +1,4 @@
-@startuml Hello World
+@startuml
 !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v13.0/dist
 !include AWSPuml/AWSCommon.puml
 !include AWSPuml/BusinessApplications/all.puml
@@ -19,10 +19,8 @@ IdentityAccessManagementPermissions(bucketPerms,"solveapuzzle-repo-policy","Poli
 
 IdentityAccessManagementAddon(oidcConnect,"OIDCProvider","token.actions.githubusercontent.com")
 
-bucketPerms --> storageAlias : "s3:getObject, s3:putObject"
+bucketPerms --> storageAlias : "s3:getObject, s3:putObject, s3:PutObjectAcl, s3:ListBucket"
 npiperRole --> bucketPerms : hasManagedPolicy
 npiperRole --> githubToken : "action AssumeRole"
 githubToken --> tempCred : "Temp Credential 1hr"
-
-
 @enduml

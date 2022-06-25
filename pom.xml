@@ -91,6 +91,58 @@
 				</configuration>
 			</plugin>
 
+
+			<!-- Generate diagram documentation -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+					  <phase>generate-resources</phase>
+					  <configuration>
+						<target>
+							<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
+						  <!--
+							Place any Ant task here. You can add anything
+							you can add between <target> and </target> in a
+							build.xml.
+						  -->
+
+						  <httpget src="http://jakarta.apache.org/builds/tomcat/nightly/ant.zip"
+						  destFile="optional.jar"
+						  verbose="true"
+						  usetimestamp="true"
+					  >
+						  <header name="Cookie" value="someid=43ff2b"/>
+					  </httpget>
+
+							<post to="https://kroki.io/plantuml/svg"
+								verbose="true" property="outvalue" file="./docs/roles.puml" >
+								<param name="destfile=">${basedir}/docs/response.out.txt</param>
+							</post>
+						</target>
+					  </configuration>
+					  <goals>
+						<goal>run</goal>
+					  </goals>
+				   </execution>
+			    </executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+							  <groupId>ant</groupId>
+							  <artifactId>ant</artifactId>
+							</exclusion>
+						  </exclusions>
+					</dependency>
+
+				</dependencies>
+		    </plugin>
+
 		</plugins>
 
 		<!-- These plugin definitions are inherited by child POM'ss -->

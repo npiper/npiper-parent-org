@@ -39,6 +39,7 @@ Resources:
              Action:
                - s3:PutObject
                - s3:GetObject
+               - s3:ListBucket
              Resource:
                - arn:aws:s3:::solveapuzzle-repo/release/*
                - arn:aws:s3:::solveapuzzle-repo/site/*
@@ -49,3 +50,19 @@ Outputs:
     !Ref buildaccesskey
  SecretKeyforbuild:
   Value: !GetAtt buildaccesskey.SecretAccessKey
+
+
+
+{
+    "Credentials": {
+        "AccessKeyId": "ASIAUZSMZFSMA64H5UGK",
+        "SecretAccessKey": "liAMWpiVZi1qEyCudqV4yLzDSqwFBVm1TRphYgcP",
+        "SessionToken": "IQoJb3JpZ2luX2VjEE8aCWV1LXdlc3QtMSJHMEUCIQDwecYg9lsFN5QWuZfJqRqTzF7lIhVaZqqYZBtRtG7YUQIgH7FiYe+z7+D4pd7od2i8Kgxd5R3Is1Khf3VEMU10FcMqlAIIaBADGgwzMjk3OTk3NzMzMzYiDM+iAtM/h0qY3lcviCrxAYrxBHaCUKVMTQyL8HmsDam44rZjRvuYLOuEwOePidFAlAkn5vNZkFDEOLR2vhgys0nUYoVDc22N5rUZjA1EYak6A/Evo1PYYS4j9hyzVHeIPSIVjSjzVdESf3iCpyCY+l8cSN5xM+XFegu2psxLYrKrpwWm3KMYMFrBxHSW24DthX3buPm+3K/B1qw28tlie5b+ytPMkxRweVU4xkgDfijv3WKpVuPx8xLC6DisJBayPrf3riGTojb+UjMxKr3DCHjFd/V0ZwmghwMuK+LbA5uOvwn1Rpe7usMtbGV+OvNEzQP5nxppFQgPGnzuCfKoBBcw2r/OlQY6nQFTP48aCkCPYFo30w+0sX8h4XF3Fs1yr0bnFsE4xjQlkS6x1FiEPUOZ5u0El0D3US4itavas2xCk9sUhO68La8bmLd39TgIZzNWzkOP2tsbyjAmO9C9RzV7j2VQ8wS2BPiEUpTmUPQ89pSYOg6Dxw84AWUUDEZQOdT5Kb0KnphGx/RlZ4x0vWUNf+AVg8FLh4muu2/wW3eD3dKd7d77",
+        "Expiration": "2022-06-23T00:03:54+00:00"
+    },
+    "AssumedRoleUser": {
+        "AssumedRoleId": "AROAUZSMZFSMCW2GGROKM:session",
+        "Arn": "arn:aws:sts::329799773336:assumed-role/github-builduser-role/session"
+    }
+}
+
