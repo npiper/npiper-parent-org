@@ -154,6 +154,8 @@ mvn site deploy scm:tag -Drevision=${TRAVIS_BUILD_NUMBER}.$(git rev-parse --shor
 
 [github actions - git semantic version action](https://github.com/marketplace/actions/git-version)
 
+[github environment variables](https://docs.github.com/en/actions/learn-github-actions/environment-variables)
+
 [github actions - OpenID connect guide](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims)
 
 [AWS S3 example bucket policies](https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html#example-bucket-policies-use-case-4)
