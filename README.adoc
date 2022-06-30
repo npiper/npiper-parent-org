@@ -1,5 +1,5 @@
 ifdef::env-github[]
-:imagesdir: foo/
+:imagesdir: ./
 endif::[]
 
 :icons: font
@@ -119,17 +119,6 @@ Use the shell script `gitsetup.sh` to create a project and appropriate branches 
 - master : semantic versioning and deployments run through this branch
 ```
 
-=== Conventions to follow
-
-Repository is in Github, as the site pages go to Github pages, and use Github actions for CI-CD. 
-This should be effectively free for most developers.
-
-`project.name` = Align to GIT repository name
-
-Use git issue tracking (default)
-When using `site` put published version into github pages as path `${project.name}`
-Repository is the Amazon S3 solveapuzzle-repo for Deployment, retrieving any 'neipiper.me' dependencies.
-
 === Encrypt keys into Github Actions
 
 The following encrypted variables are used on a succesful build and `mvn deploy` to the Release repository.
@@ -146,8 +135,19 @@ _TO DO:  How to do this via curl, secrets must be encrypted/encoded before posti
 
 https://docs.github.com/en/rest/actions/secrets#create-or-update-a-repository-secret[Github - create or update a repository secret]
 
+=== Conventions to follow
 
-=== Choose the right Parent Version
+Repository is in Github, as the site pages go to Github pages, and use Github actions for CI-CD. 
+This should be effectively free for most developers.
+
+`project.name` = Align to GIT repository name
+
+Use git issue tracking (default)
+When using `site` put published version into github pages as path `${project.name}`
+Repository is the Amazon S3 solveapuzzle-repo for Deployment, retrieving any 'neipiper.me' dependencies.
+
+
+=== Choose the right Parent Version for inheritance (Ranges)
 
 Release versions can be browsed using the 'tags' https://github.com/npiper/npiper-parent-pom/tags[tags]
 
@@ -157,7 +157,7 @@ Release Naming Convention:  *MAJOR.MINOR.PATCH* _BUILD.COMMIT*
 
 _Release management and supported version changes should only be done off the master branch._
 
-The following parent example inherits the highest version under v1.0.0.
+The following parent example inherits the highest version under <= v1.0.0.
 
 ```
   <parent>
@@ -166,6 +166,8 @@ The following parent example inherits the highest version under v1.0.0.
     <version>(,1.0]</version>
   </parent>
 ```
+
+How this works?... https://docs.oracle.com/middleware/1212/core/MAVEN/maven_version.htm#MAVEN402[Maven Version Range References]
 
 === Set your project name
 
@@ -199,7 +201,121 @@ This is to workaround to an inconsistency in Maven that child projects scm tag, 
 ```
 
 
-=== Github pages Homepage for Maven Site documentation
+
+
+
+== About the POM.xml 
+
+
+
+=== Build Extension: Configuration to use an S3 Repository
+
+To add the capability of using an S3 Bucket as a repository, 2 extensions are added 
+
+https://github.com/seahen/maven-s3-wagon[com.github.seahen:maven-s3-wagon] - enables communication between Maven and Amazon S3
+
+https://maven.apache.org/wagon/wagon-providers/wagon-webdav-jackrabbit/[org.apache.maven.wagon:wagon-webdav-jackrabbit] - enables communication to WebDav servers.
+
+
+```
+<build>
+		<!-- Extension : s3 wagon for repo -->
+		<extensions>
+			<extension>
+				<groupId>com.github.seahen</groupId>
+				<artifactId>maven-s3-wagon</artifactId>
+				<version>${mavenS3WagonVersion}</version>
+			</extension>
+
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>${wagon-webdav-jackrabbitVersion}</version>
+			</extension>
+		</extensions>
+
+        ...
+</build>
+```
+
+=== Build Plugin: Enforcer for Build Rules
+
+Use the Enforcer plugin to verify that a minimum Maven version that allows for parent / child version ranges, v3.6+.
+
+https://maven.apache.org/enforcer/maven-enforcer-plugin/[org.apache.maven.plugins:maven-enforcer-plugin]
+
+
+=== Build Pluigin: Deploy, off in local mode, on in CI/CD Profile
+
+The deploy plugin is primarily used during the deploy phase, to add your artifact(s) to a remote repository for sharing with other developers and projects.
+
+Deploys as they are configured to deploy to S3 Repo are off locally, but turned to true in the CI/CD profile so that only a CI/CD driven build will do the process of updating the maven site documentation, tagging the codebase and deploying to the S3 bucket.
+
+```
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+```
+
+
+=== Plugins Inherited:  pluginManagement
+
+Section  is intended to configure project builds that inherit from this one
+
+Child projects are set to use the reporting plugin: https://maven.apache.org/plugins/maven-project-info-reports-plugin/[`maven-project-info-reports`]
+
+=== Project Information summary
+
+One of the main purposes of the org parent POM is to pre-load inherited Organisation values for documentation and maintenance, used in reporting / site goals.
+
+Using some property values these can be automatically changed in each child project by using common maven values such as `${project.name}` when convention is followed.
+
+```
+<name/>
+<description/>
+<url/>
+<inceptionYear/>
+<licenses/>
+<developers/>
+<organization/>
+```
+
+https://maven.apache.org/pom.html#More_Project_Information[Maven POM Reference: More Project Information]
+
+=== Project Environment (Build/Deploy/Repo settings)
+
+The following elements are set in this Parent Org POM to mainly allow inheritance, because of one known issue the SCM element needs to be re-defined in each Child repository.
+
+Using some property values these can be automatically changed in each child project by using common maven values such as `${project.name}` when convention is followed.
+
+
+```
+<issueManagement/>
+<ciManagement/>
+<scm/>
+<repositories/>
+<distributionManagement/>
+```
+
+https://maven.apache.org/pom.html#Environment_Settings[Maven POM Reference: Environment Settings]
+
+=== Profile (CI)
+
+The CI/CD profile looks for the Github build environment variable `CI` to be active.
+
+```
+site-maven-plugin
+maven-deploy-plugin (skip = false)
+```
+
+=== Profile : PluginManagement (Inheritance)
+
+```
+com.github.github:site-maven-plugin
+maven-deploy-plugin
+maven-scm-plugin
+```
+
+=== Site Plugin: Github pages Homepage for Maven Site documentation
 
 The pom file sets up for use the plugin https://github.com/github/maven-plugins[com.github.github:site-maven-plugin]
 
@@ -220,9 +336,6 @@ This plugin can be used to deploy a created Maven site to a https://github.com/n
 ```
 https://${githubOrg}.github.io/${project.name}/
 ```
-
-
-== About the POM.xml 
 
 
 === Child project full example
@@ -261,7 +374,3 @@ Run the maven command from `.github/workflow/build_master.yml` to test a build a
 ```
 mvn site deploy scm:tag -Drevision=${BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
 ```
-
-== Project Configuration
-
-== Build Dependencies, Extensions
