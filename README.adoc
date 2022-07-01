@@ -119,6 +119,15 @@ Use the shell script `gitsetup.sh` to create a project and appropriate branches 
 - master : semantic versioning and deployments run through this branch
 ```
 
+=== Inheritance model
+
+The `npiper-parent-org` provides placeholder information that can be re-used in sub-poms in the Github organisation, that allows the same features and conventions
+for deployment, publishing, CI/CD, rules (Maven Enforcer) and site generation to be consistently applied.
+
+The `${project.name}` variable is used in this POM's settings that allows may common values to be re-used.
+
+image:./docs/inheritance.svg[Inheritance example]
+
 === Encrypt keys into Github Actions
 
 The following encrypted variables are used on a succesful build and `mvn deploy` to the Release repository.
@@ -201,11 +210,7 @@ This is to workaround to an inconsistency in Maven that child projects scm tag, 
 ```
 
 
-
-
-
-== About the POM.xml 
-
+== About the POM for `npiper-parent-org` 
 
 
 === Build Extension: Configuration to use an S3 Repository
@@ -341,7 +346,55 @@ https://${githubOrg}.github.io/${project.name}/
 === Child project full example
 
 ```
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
+
+	<!-- Template Project file for my projects - based on https://maven.apache.org/pom.html -->
+
+	<artifactId>child.pom</artifactId>
+	<!-- Default starting version is 0-SNAPSHOT -->
+	<version>0.1.0_${revision}</version>
+	<packaging>pom</packaging>
+	
+	<parent>
+		<groupId>neilpiper.me</groupId>
+		<artifactId>parent.org</artifactId>
+        <version>(,1.0]</version>
+	</parent>
+
+
+	<name>child-pom</name>
+
+	<properties>
+		<!-- Sane default when no revision property is passed in from the commandline -->
+		<revision>0-SNAPSHOT</revision>
+		...
+	</properties>
+
+	<!-- BUILD SETTINGS -->
+
+	<dependencies>
+       ...
+	</dependencies>
+
+	<build>
+	   <plugins>
+	   </plugins>
+   </build>
+
+
+
+   <!-- Workaround scm inheritance bug in Maven for parent/child -->
+   <scm>
+		<url>https://github.com/npiper/child-pom</url>
+		<connection>scm:git:git://github.com/npiper/child-pom.git</connection>
+		<developerConnection>scm:git:https://github.com/npiper/child-pom.git</developerConnection>
+	</scm>
+ 
+</project>
 ```
 
 === Debugging locally
@@ -361,8 +414,6 @@ export AWS_ACCESS_KEY_ID=[Your_AWS_Access_Key]
 export AWS_SECRET_KEY=[Your_AWS_Secret_Key]
 export GIT_USER_NAME=[Your Git User]
 export GITPW=[Your GIT OAuth] 
-export DOCKER_USERNAME=[Your Dockerhub user] 
-export DOCKER_PASSWORD=[Your Dockerhub password] 
 export BUILD_NUMBER=01TEST
 export CI=true
 ```
@@ -374,3 +425,6 @@ Run the maven command from `.github/workflow/build_master.yml` to test a build a
 ```
 mvn site deploy scm:tag -Drevision=${BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
 ```
+=== Writing Documentation
+
+We are going after https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74[Github Flavoured Asciidoc] with Plantuml, Kroki for diagrams.
