@@ -1,15 +1,45 @@
 #/bin/sh
 
+dirName=$(realpath --relative-to=.. $(pwd))
+
+
+## Curl on path?
+if ! command -v curl &> /dev/null
+then
+    echo "curl could not be found, please install curl"
+    exit 1;
+fi
+
+## Git on path?
+if ! command -v git &> /dev/null
+then
+    echo "git could not be found, please install git"
+    exit 1;
+fi
+
+
+## Is our Github Auth token set?
+if [[ -z $GIT_PW ]]; then
+   echo "Need to provide a Github Password token to Authenticate in environment variable GIT_PW"
+   exit 1;
+fi
+
+
 # Check if our github project is set up
-response=$(curl --write-out %{http_code} --silent --output /dev/null https://github.com/npiper/java-archetype)
+# Assumes a public repo here
+# Possibly better to Authenticate at this point too using the proper Rest Query API?
+#response=$(curl --write-out %{http_code} --silent --output /dev/null https://github.com/npiper/${dirName})
+
+echo "Dirname: ${dirName} , GitPW : ${GIT_PW}"
+
+response=$(curl --write-out %{http_code} --silent --output /dev/null  -H "Accept: application/vnd.github+json" -H "Authorization: token $GIT_PW" https://api.github.com/repos/npiper/${dirName}adfsasf)
 
 # Check status code
 if [[ "$response" -ne 200 ]] ; then
-  printf "java-archetype repository has not been created - to create try this line \n curl -u 'npiper' https://api.github.com/user/repos -d '{\"name\":\"java-archetype\"}'"
+  printf "A ${dirName} repository has not been created yet in Github - to do this see this info page - https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user"
   exit 1;
 fi
 
-# Check git & travis-ci are on path
 
 # Check environment variables
 if [[ -z $AWS_ACCESS_KEY_ID || -z $GITPW || -z $AWS_SECRET_KEY ]]; then	
@@ -21,24 +51,18 @@ printf "All env variables have values"
 
 # Initialise repository
 git init
-git add . && git commit -am "initial commit"
-git remote add origin https://github.com/npiper/java-archetype.git
-git push --set-upstream origin master
+echo "# ${dirName} repostiory" > README.md
+git add README.md && git commit -am "initial commit"
 
-travis login --user npiper --github-token $GITPW
-travis sync
-travis enable
+# Rename master to main
+git branch -m master main
+
+git remote add origin https://github.com/npiper/${dirName}.git
+git push -u origin main
+git push --set-upstream origin main
 
 
-# Encrypt travis variables into .travis.yml
-travis encrypt AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --add
-travis encrypt AWS_SECRET_KEY=$AWS_SECRET_KEY --add
-travis encrypt GIT_USER_NAME=npiper --add
-travis encrypt GITPW=$GITPW --add
-
-git add .travis.yml
-git commit -m "Updated encrypted settings"
-git push origin master
+# Encrypt Github variables into Repository keys
 
 
 # Create 'develop' branch & push to repo
@@ -46,15 +70,14 @@ git branch develop
 git checkout develop
 git add .
 git commit -m "adding a change from the develop branch"
-git checkout master
+git checkout main
 git push origin develop
 
 # create gh-pages branch
 git checkout --orphan gh-pages
 git rm -rf .
-touch README.md
+echo "# broken-repo Github pages branch" >> README.md
 git add README.md
 git commit -m 'initial gh-pages commit'
 git push origin gh-pages
-
 git checkout develop

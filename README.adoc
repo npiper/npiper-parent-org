@@ -71,7 +71,7 @@ Parameters:
   RepositoryName = npiper-parent-org
 
 
-aws cloudformation create-stack --stack-name teststack --template-body file://$(pwd)/role-cloudformation.yaml --parameters ParameterKey=GitHubOrg,ParameterValue=npiper ParameterKey=RepositoryName,ParameterValue=npiper-parent-org --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name teststack --template-body file://$(pwd)/cloudformation/role-cloudformation.yaml --parameters ParameterKey=GitHubOrg,ParameterValue=npiper ParameterKey=RepositoryName,ParameterValue=npiper-parent-org --capabilities CAPABILITY_NAMED_IAM
 ```
 
 
@@ -428,3 +428,18 @@ mvn site deploy scm:tag -Drevision=${BUILD_NUMBER}.$(git rev-parse --short HEAD)
 === Writing Documentation
 
 We are going after https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74[Github Flavoured Asciidoc] with Plantuml, Kroki for diagrams.
+
+
+=== Creating a Repo based on directory name
+
+cd to your new directory, have to have your Github auth token set in Env variable GIT_PW
+
+```
+export dirName=$(realpath --relative-to=.. $(pwd))
+
+
+curl -X POST \                                                 
+-H "Accept: application/vnd.github+json" \
+-H "Authorization: token $GIT_PW" \
+-d '{"name":"${dirName"}' https://api.github.com/user/repos
+````
