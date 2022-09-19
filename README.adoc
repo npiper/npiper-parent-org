@@ -144,6 +144,14 @@ _TO DO:  How to do this via curl, secrets must be encrypted/encoded before posti
 
 https://docs.github.com/en/rest/actions/secrets#create-or-update-a-repository-secret[Github - create or update a repository secret]
 
+LibSodium examples
+https://libsodium.gitbook.io/doc/secret-key_cryptography/encrypted-messages
+
+**List secrets**
+```
+curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer {PW Tokent}}" https://api.github.com/repos/npiper/npiper-parent-org/actions/secrets 
+````
+
 === Conventions to follow
 
 Repository is in Github, as the site pages go to Github pages, and use Github actions for CI-CD. 
@@ -342,6 +350,12 @@ This plugin can be used to deploy a created Maven site to a https://github.com/n
 https://${githubOrg}.github.io/${project.name}/
 ```
 
+=== Next Steps
+
+- [ ] Automate / guidance for encrypting Github secrets using script or command line (per new repo, in setup script)
+- [ ] Setup script creates required brances and workflows, sample Github actions template
+- [ ] Steps / Github actions to create the AWS CloudFormation Stack
+- [ ] Remove references to travisCI build config
 
 === Child project full example
 
@@ -425,6 +439,7 @@ Run the maven command from `.github/workflow/build_master.yml` to test a build a
 ```
 mvn site deploy scm:tag -Drevision=${BUILD_NUMBER}.$(git rev-parse --short HEAD) -Dusername=${GIT_USER_NAME} -Dpassword=${GITPW}
 ```
+
 === Writing Documentation
 
 We are going after https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74[Github Flavoured Asciidoc] with Plantuml, Kroki for diagrams.
@@ -443,3 +458,4 @@ curl -X POST \
 -H "Authorization: token $GIT_PW" \
 -d '{"name":"${dirName"}' https://api.github.com/user/repos
 ````
+
