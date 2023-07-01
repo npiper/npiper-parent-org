@@ -49,6 +49,8 @@ https://github.com/npiper/npiper-parent-org/tags[Tags]
 An S3 bucket (public access) has been created called `solveapuzzle-repo`, to avoid the need to keep AWS-credentials in github a role is created that 
 can get an OpenIDConnect credential via a Github trusted authentication.  The role has minimal permissions to only be able to interact with the S3 bucket.
 
+https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services[Github Actions: Configure OpenID Connect for AWS]
+
 image::./docs/roles.svg[]
 
 
