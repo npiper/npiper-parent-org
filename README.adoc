@@ -152,7 +152,7 @@ https://libsodium.gitbook.io/doc/secret-key_cryptography/encrypted-messages
 **List secrets**
 ```
 curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer {PW Tokent}}" https://api.github.com/repos/npiper/npiper-parent-org/actions/secrets 
-````
+```
 
 === Conventions to follow
 
@@ -460,4 +460,3 @@ curl -X POST \
 -H "Authorization: token $GIT_PW" \
 -d '{"name":"${dirName"}' https://api.github.com/user/repos
 ````
-
